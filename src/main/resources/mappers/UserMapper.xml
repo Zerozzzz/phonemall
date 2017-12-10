@@ -130,11 +130,11 @@
         role = #{role,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null" >
+      <!--create_time = #{createTime,jdbcType=TIMESTAMP},-->
+    </if>
+    <!--<if test="updateTime != null" >-->
         update_time =now(),
-      </if>
+
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -179,10 +179,29 @@
   <select id="checkAnswer" resultType="int" parameterType="map">
     SELECT COUNT (1)
     FROM mmall_user
-    WHERE username=#{username}
-    and question=#{question}
-    and answer=#{answer}
+    WHERE username = #{username}
+    and question = #{question}
+    and answer = #{answer}
+  </select>
 
+  <update id="updatePasswordByUsername" parameterType="map">
+    UPDATE mmall_user
+    SET password = #{passwordNew},updata_time = now()
+    where username = #{username}
+  </update>
+  
+  <select id="checkPassword" resultType="int" parameterType="map">
+    SELECT COUNT (1)
+    FROM mmall_user
+    WHERE id = #{userId}
+    and password = #{password}
+  </select>
+
+  <select id="checkEmailByUserId" resultType="int" parameterType="map">
+    SELECT count(1)
+    FROM mmall_user
+    WHERE email = #{email}
+    and id != #{userId}
   </select>
 
 </mapper>
