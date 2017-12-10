@@ -10,13 +10,13 @@ import com.mmall.util.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.UUID;
 
 /**
  * Created by Administrator on 2017/12/10.
  */
 @Service("iUserService")
+
 public class UserServiceImpl implements IUserService {
 
     @Autowired
@@ -73,13 +73,14 @@ public class UserServiceImpl implements IUserService {
 
             if (Const.EMAIL.equals(type)) {
                 int resultCount = userMapper.checkEmail(str);
-                if (resultCount == 0) {
+                if (resultCount > 0) {
                     return ServerResponse.createByErrorMessage("邮箱已存在");
                 }
             }
         }else {
             return ServerResponse.createByErrorMessage("参数错误");
         }
+
         return ServerResponse.createBySuccessMessage("验证成功");
     }
 
@@ -103,10 +104,10 @@ public class UserServiceImpl implements IUserService {
         return ServerResponse.createByErrorMessage("问题答案不匹配");
     }
 
-    public ServerResponse<String> forgetResetPassword(String username,String passworNew,String forgetToken){
+    public ServerResponse<String> forgetResetPassword(String username,String passwordNew,String forgetToken){
         //判断用户名是否存在
         ServerResponse validResponse = this.checkValid(username,Const.USERNAME);
-        if (!validResponse.isSuccess()) {//用户不存在
+        if (validResponse.isSuccess()) {//用户不存在
             return ServerResponse.createByErrorMessage("用户不存在");
         }
         //判断forgetToken是否为空
@@ -119,8 +120,8 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMessage("token错误或是过期");
         }
         if (StringUtils.equals(forgetToken,token)) {
-            String md5Password = MD5Util.MD5EncodeUtf8(passworNew);
-            int rowCount = userMapper.updatePasswordByUsername(username,passworNew);
+            String md5Password = MD5Util.MD5EncodeUtf8(passwordNew);
+            int rowCount = userMapper.updatePasswordByUsername(username,md5Password);
             if (rowCount > 0) {
                 return ServerResponse.createBySuccessMessage("修改密码成功");
             }
@@ -177,5 +178,16 @@ public class UserServiceImpl implements IUserService {
         }
         user.setPassword(StringUtils.EMPTY);
         return ServerResponse.createBySuccess(user);
+    }
+
+    /*
+    * 检验用户为管理员
+    * */
+    public ServerResponse checkAdminRole(User user){
+        if(user.getRole().intValue() == Const.Role.ROLE_ADMIN && user != null){
+            return ServerResponse.createBySuccess();
+        }else {
+            return ServerResponse.createByError();
+        }
     }
 }
