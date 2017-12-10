@@ -8,7 +8,6 @@ import com.mmall.service.ICategoryService;
 import com.mmall.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -64,4 +63,39 @@ public class CategoryManegeController {
             return ServerResponse.createByErrorMessage("您无权限进行相关操作");
         }
     }
+    /*
+     *通过category的ID获得平级的子节点
+     */
+    @RequestMapping("get_children_category.do")
+    @ResponseBody
+    public ServerResponse getChildrenParallelCategory(HttpSession session,@RequestParam(value = "categoryId",defaultValue = "0") Integer categoryId){
+        User currentUser = (User)session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {
+            return ServerResponse.createByErrorCode(ResponseCode.NEED_LOGIN.getCode(),"未登录，请先登录");
+        }
+        if (iUserService.checkAdminRole(currentUser).isSuccess()) {
+            return iCategoryService.getChildrenParallelCategory(categoryId);
+        }else{
+            return ServerResponse.createByErrorMessage("您不是管理员，没有权限");
+        }
+    }
+
+    /*
+    * 通过categoryID递归出所有的子分类
+    * 0 -> 10001 -> 100001 -> ...
+    * */
+    @RequestMapping("get_deep_category.do")
+    @ResponseBody
+    public ServerResponse getCategoryAndDeepChildrenCategory(HttpSession session,@RequestParam(value = "categoryId",defaultValue = "0") Integer categoryId){
+        User currentUser = (User)session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {
+            return ServerResponse.createByErrorCode(ResponseCode.NEED_LOGIN.getCode(),"未登录，请先登录");
+        }
+        if (iUserService.checkAdminRole(currentUser).isSuccess()) {
+            return iCategoryService.selectCategoryAndChildrenById(categoryId);
+        }else{
+            return ServerResponse.createByErrorMessage("您不是管理员，没有权限");
+        }
+    }
+
 }

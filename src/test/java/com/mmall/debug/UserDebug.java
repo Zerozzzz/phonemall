@@ -36,4 +36,10 @@ public class UserDebug {
 //        userService.forgetResetPassword("geely",passwordMD,"eef8d5ce-6527-4396-ba7b-fdcc2a96f944");
 //        userController.forgerResetPassword("geely",passwordMD,"3b8e6a58-a70b-4ac4-a129-0b3230132e59");
     }
+    @Test
+    public void testTrim(){
+        String str = "   ac b   ";
+        String str1 = str.trim();
+        logger.info(str1);
+    }
 }
