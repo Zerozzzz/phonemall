@@ -8,6 +8,7 @@ import com.mmall.dao.ProductMapper;
 import com.mmall.pojo.Category;
 import com.mmall.pojo.Product;
 import com.mmall.service.IProductService;
+import com.mmall.util.DateTimeUtil;
 import com.mmall.util.PropertiesUtil;
 import com.mmall.vo.ProductDetailVo;
 import org.apache.commons.lang3.StringUtils;
@@ -79,8 +80,8 @@ public class ProductServiceImpl implements IProductService {
             return ServerResponse.createByErrorMessage("商品不存在或已下架");
         }
 
-        ProductDetailVo productDetailVo = new ProductDetailVo();
-
+        ProductDetailVo productDetailVo = assembleProductDetailVo(product);
+        return ServerResponse.createBySuccess(productDetailVo);
     }
 
     private ProductDetailVo assembleProductDetailVo(Product product){
@@ -105,7 +106,10 @@ public class ProductServiceImpl implements IProductService {
             productDetailVo.setCategoryId(category.getParentId());
         }
 
-        productDetailVo.setCreateTime(DateTimeUtil.);//// TODO: 2018/3/12  
+        productDetailVo.setCreateTime(DateTimeUtil.DateToStr(product.getCreateTime()));
+        productDetailVo.setUpdateTime(DateTimeUtil.DateToStr(product.getUpdateTime()));
+
+        return productDetailVo;
     }
 
 }

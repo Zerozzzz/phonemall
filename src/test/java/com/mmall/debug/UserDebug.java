@@ -41,5 +41,11 @@ public class UserDebug {
         String str = "   ac b   ";
         String str1 = str.trim();
         logger.info(str1);
+
+        String s2 = "a,b,c";
+        String[] sa = s2.split(",");
+        for (String etim : sa) {
+            logger.info(etim);
+        }
     }
 }
