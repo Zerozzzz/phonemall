@@ -118,7 +118,7 @@ public class ProductServiceImpl implements IProductService {
         return productDetailVo;
     }
 
-    private ServerResponse<PageInfo> getProductList(int pageNum, int pageSize){
+    public ServerResponse<PageInfo> getProductList(int pageNum, int pageSize){
         //startPage--start
         //填充自己的sql查询逻辑
         //pageHelper-收尾
