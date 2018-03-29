@@ -18,7 +18,8 @@ public class DateTimeUtil {
     //Date - Str
     //Str - Date
     public static final String STANDARD_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    public static String DateToStr(Date date, String formatStr){
+
+    public static String DateToStr(Date date, String formatStr) {
         if (date == null) {
             return StringUtils.EMPTY;
         }
@@ -26,13 +27,13 @@ public class DateTimeUtil {
         return dateTime.toString(formatStr);
     }
 
-    public static Date strToDate(String dateTimeStr,String formatStr){
+    public static Date strToDate(String dateTimeStr, String formatStr) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(formatStr);
         DateTime dateTime = dateTimeFormatter.parseDateTime(dateTimeStr);
         return dateTime.toDate();
     }
 
-    public static String DateToStr(Date date){
+    public static String DateToStr(Date date) {
         if (date == null) {
             return StringUtils.EMPTY;
         }
@@ -40,7 +41,7 @@ public class DateTimeUtil {
         return dateTime.toString(STANDARD_FORMAT);
     }
 
-    public static Date strToDate(String dateTimeStr){
+    public static Date strToDate(String dateTimeStr) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(STANDARD_FORMAT);
         DateTime dateTime = dateTimeFormatter.parseDateTime(dateTimeStr);
         return dateTime.toDate();
