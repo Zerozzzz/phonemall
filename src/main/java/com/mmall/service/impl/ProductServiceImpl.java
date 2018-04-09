@@ -20,6 +20,7 @@ import org.joda.time.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -148,5 +149,27 @@ public class ProductServiceImpl implements IProductService {
 
         return productListVo;
     }
+
+    public ServerResponse<PageInfo> searchProduct(String productName, Integer productId, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        if (StringUtils.isNotBlank(productName)) {
+            productName = new StringBuffer().append("%").append(productName).append("%").toString();
+        }
+
+        List<Product> productList = productMapper.selectProductListByIdAndName(productId,
+                productName, pageNum, pageSize);
+        List<ProductListVo> productListVoList = new LinkedList<>();
+        for (Product productItem: productList) {
+            ProductListVo productListVo = assembleProductListVo(productItem);
+            productListVoList.add(productListVo);
+        }
+
+        PageInfo pageResult = new PageInfo(productList);
+        pageResult.setList(productListVoList);
+
+        return ServerResponse.createBySuccess(pageResult);
+    }
+
+
 
 }

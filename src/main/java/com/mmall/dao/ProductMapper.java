@@ -18,4 +18,6 @@ public interface ProductMapper {
     int updateByPrimaryKey(Product record);
 
     List<Product> selectProductList();
+
+    List<Product> selectProductListByIdAndName(Integer productId, String productName, int pageNum, int pageSize);
 }
