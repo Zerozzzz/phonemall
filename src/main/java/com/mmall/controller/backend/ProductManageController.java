@@ -10,7 +10,9 @@ import com.mmall.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -100,4 +102,10 @@ public class ProductManageController {
             return ServerResponse.createByErrorMessage("您没有权限进行此项操作，需管理员权限");
         }
     }
+
+    public ServerResponse upload(MultipartFile file, HttpServletRequest request) {
+        String path = request.getSession().getServletContext().getRealPath("upload");
+        return null;
+    }
+
 }
