@@ -1,6 +1,5 @@
 package com.mmall.service.impl;
 
-import com.mmall.common.ServerResponse;
 import com.mmall.service.IFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +30,7 @@ public class FileServiceImplements implements IFileService {
             fileDir.mkdirs();
         }
 
-        File targetFile = new File(path,fileExtentinName);
+        File targetFile = new File(path,fileUploadName);
         try {
             file.transferTo(targetFile);//文件上传一成功
             // TODO: 2018/4/24 将targetFile 上传到FTP服务器
