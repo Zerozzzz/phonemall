@@ -16,7 +16,6 @@ import java.util.UUID;
  * Created by Administrator on 2017/12/10.
  */
 @Service("iUserService")
-
 public class UserServiceImpl implements IUserService {
 
     @Autowired

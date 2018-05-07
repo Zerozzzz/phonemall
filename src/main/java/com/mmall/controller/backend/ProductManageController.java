@@ -5,8 +5,10 @@ import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.Product;
 import com.mmall.pojo.User;
+import com.mmall.service.IFileService;
 import com.mmall.service.IProductService;
 import com.mmall.service.IUserService;
+import com.mmall.util.PropertiesUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2017/12/10.
@@ -27,6 +31,9 @@ public class ProductManageController {
 
     @Autowired
     private IProductService iProductService;
+
+    @Autowired
+    private IFileService iFileService;
 
     @RequestMapping(value = "save_product.do",method = RequestMethod.GET)
     @ResponseBody
@@ -103,9 +110,17 @@ public class ProductManageController {
         }
     }
 
+    @RequestMapping(value = "upload.do")
+    @ResponseBody
     public ServerResponse upload(MultipartFile file, HttpServletRequest request) {
         String path = request.getSession().getServletContext().getRealPath("upload");
-        return null;
+        String targetFileName = iFileService.upload(file, path);
+        String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + targetFileName;
+
+        Map fileMap = new HashMap();
+        fileMap.put("uri", targetFileName);
+        fileMap.put("url", url);
+        return ServerResponse.createBySuccess(fileMap);
     }
 
 }
