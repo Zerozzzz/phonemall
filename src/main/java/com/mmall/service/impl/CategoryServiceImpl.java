@@ -28,6 +28,7 @@ public class CategoryServiceImpl implements ICategoryService{
     @Autowired
     private CategoryMapper categoryMapper;
 
+    @Override
     public ServerResponse addCategory(String categoryName,Integer parentId){
         if (StringUtils.isBlank(categoryName) || parentId == null) {
             return ServerResponse.createByErrorMessage("商品管理参数未添加");
@@ -43,6 +44,7 @@ public class CategoryServiceImpl implements ICategoryService{
         return ServerResponse.createByErrorMessage("分类添加失败");
     }
 
+    @Override
     public ServerResponse updateCategoryName(Integer categoryId,String categoryName){
         if (categoryId == null || StringUtils.isBlank(categoryName)) {
             return ServerResponse.createByErrorMessage("参数不能为空");
@@ -59,6 +61,7 @@ public class CategoryServiceImpl implements ICategoryService{
         return ServerResponse.createByErrorMessage("分类名称更新失败");
     }
 
+    @Override
     public ServerResponse<List<Category>> getChildrenParallelCategory(Integer categoryId){
         List<Category> categoryList = categoryMapper.selectCategoryChildrenByParentId(categoryId);
         if (CollectionUtils.isEmpty(categoryList)) {
@@ -67,6 +70,7 @@ public class CategoryServiceImpl implements ICategoryService{
         return ServerResponse.createBySuccess(categoryList);
     }
 
+    @Override
     public ServerResponse selectCategoryAndChildrenById(Integer categoryId){
         Set<Category> categorySet = new HashSet<>();
         //调用递归，此时返回的Set就包含了所有子节点及孙子节点

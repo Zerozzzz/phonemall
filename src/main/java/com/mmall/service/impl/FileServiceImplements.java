@@ -18,15 +18,16 @@ import java.util.UUID;
 @Service("iFileService")
 public class FileServiceImplements implements IFileService {
 
-        public String upload(MultipartFile file, String path) {
+    @Override
+    public String upload(MultipartFile file, String path) {
         Logger logger = LoggerFactory.getLogger(FileServiceImplements.class);
         String originFileName = file.getOriginalFilename();
         //扩展名
-        String fileExtentinName = originFileName.substring(originFileName.lastIndexOf(".")+1);
+        String fileExtensionName = originFileName.substring(originFileName.lastIndexOf(".")+1);
 
         //上传文件名（不重复）
-        String fileUploadName = UUID.randomUUID().toString() + fileExtentinName;
-        logger.info("文件名{}，扩展名{}，新文件名{}", originFileName, fileExtentinName, fileUploadName);
+        String fileUploadName = UUID.randomUUID().toString() + fileExtensionName;
+        logger.info("文件名{}，扩展名{}，新文件名{}", originFileName, fileExtensionName, fileUploadName);
         //上传目录
         File fileDir = new File(path);
         if (!fileDir.exists()) {
@@ -36,7 +37,8 @@ public class FileServiceImplements implements IFileService {
 
         File targetFile = new File(path,fileUploadName);
         try {
-            file.transferTo(targetFile);//文件上传一成功
+            //文件上传一成功
+            file.transferTo(targetFile);
             // 将targetFile 上传到FTP服务器
             FTPUtil.uploadFile(Lists.newArrayList(targetFile));
             //  将upload目录下的文件删除

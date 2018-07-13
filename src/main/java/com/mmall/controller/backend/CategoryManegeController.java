@@ -27,7 +27,7 @@ public class CategoryManegeController {
     @Autowired
     private ICategoryService iCategoryService;
 
-    /*
+    /**
     *添加分类管理
     * */
     @RequestMapping("add_category.do")
@@ -47,7 +47,7 @@ public class CategoryManegeController {
 
     }
 
-    /*
+    /**
      * 修改分类的名称
      */
     @RequestMapping("set_category_name.do")
@@ -63,7 +63,7 @@ public class CategoryManegeController {
             return ServerResponse.createByErrorMessage("您无权限进行相关操作");
         }
     }
-    /*
+    /**
      *通过category的ID获得平级的子节点
      */
     @RequestMapping("get_children_category.do")
@@ -80,7 +80,7 @@ public class CategoryManegeController {
         }
     }
 
-    /*
+    /**
     * 通过categoryID递归出所有的子分类
     * 0 -> 10001 -> 100001 -> ...
     * */

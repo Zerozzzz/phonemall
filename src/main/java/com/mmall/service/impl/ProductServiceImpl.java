@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.mmall.common.Const;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.dao.CategoryMapper;
@@ -35,6 +36,7 @@ public class ProductServiceImpl implements IProductService {
     @Autowired
     private CategoryMapper categoryMapper;
 
+    @Override
     public ServerResponse saveOrUpdateProduct(Product product){
         //guava的Preconditions做参数前置判断
         Preconditions.checkNotNull(product,"product不能为空");
@@ -62,6 +64,7 @@ public class ProductServiceImpl implements IProductService {
         }
     }
 
+    @Override
     public ServerResponse<String> setSaleStatus(Integer productId,Integer productStatus){
         if (productId == null || productStatus == null) {
             return ServerResponse.createByErrorCode(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
@@ -78,6 +81,7 @@ public class ProductServiceImpl implements IProductService {
         }
     }
 
+    @Override
     public ServerResponse<ProductDetailVo> manageProductDetail(Integer productId){
         if (productId == null) {
             return ServerResponse.createByErrorCode(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
@@ -108,7 +112,8 @@ public class ProductServiceImpl implements IProductService {
 
         Category category = categoryMapper.selectByPrimaryKey(product.getCategoryId());
         if (category == null) {
-            productDetailVo.setParentCategoryId(0);//默认根节点
+            //默认根节点
+            productDetailVo.setParentCategoryId(0);
         }else {
             productDetailVo.setCategoryId(category.getParentId());
         }
@@ -119,6 +124,7 @@ public class ProductServiceImpl implements IProductService {
         return productDetailVo;
     }
 
+    @Override
     public ServerResponse<PageInfo> getProductList(int pageNum, int pageSize){
         //startPage--start
         //填充自己的sql查询逻辑
@@ -150,6 +156,7 @@ public class ProductServiceImpl implements IProductService {
         return productListVo;
     }
 
+    @Override
     public ServerResponse<PageInfo> searchProduct(String productName, Integer productId, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         if (StringUtils.isNotBlank(productName)) {
@@ -170,6 +177,22 @@ public class ProductServiceImpl implements IProductService {
         return ServerResponse.createBySuccess(pageResult);
     }
 
+    @Override
+    public ServerResponse<ProductDetailVo> getProductDetail(Integer productID) {
+        if (productID == null) {
+            return ServerResponse.createByErrorCode(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+        Product product = productMapper.selectByPrimaryKey(productID);
+        if (product == null) {
+            return ServerResponse.createByErrorMessage("商品不存在或已下架");
+        }
+        if (product.getStatus().equals(Const.SaleStateEnum.ON_SALE.getCode())) {
 
+            ProductDetailVo productDetailVo = assembleProductDetailVo(product);
+            return ServerResponse.createBySuccess(productDetailVo);
+        } else {
+            return ServerResponse.createByErrorMessage("商品已售完");
+        }
 
+    }
 }

@@ -28,9 +28,9 @@ public class FTPUtil {
     public static boolean uploadFile(List<File> fileList) throws IOException {
         FTPUtil ftpUtil = new FTPUtil(ftpIp,21,ftpUser,ftpPasswd);
         logger.info("开始连接ftp服务器");
-        boolean resualt = ftpUtil.uploadFile("img", fileList);
-        logger.info("结束上传，上传结果为{}", resualt);
-        return resualt;
+        boolean result = ftpUtil.uploadFile("img", fileList);
+        logger.info("结束上传，上传结果为{}", result);
+        return result;
     }
 
     private boolean uploadFile(String remotePath, List<File> fileList) throws IOException {
