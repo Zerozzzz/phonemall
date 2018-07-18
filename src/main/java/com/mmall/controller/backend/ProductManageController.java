@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,7 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2017/12/10.
+ *
+ * @author Zero
+ * @date 2017/12/10
  */
 @Controller
 @RequestMapping("/manage/product")
@@ -126,7 +127,7 @@ public class ProductManageController {
             String targetFileName = iFileService.upload(file, path);
             String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + targetFileName;
 
-            Map fileMap = new HashMap(16);
+            Map<String, String > fileMap = new HashMap<>(16);
             fileMap.put("uri", targetFileName);
             fileMap.put("url", url);
             return ServerResponse.createBySuccess(fileMap);
@@ -139,7 +140,7 @@ public class ProductManageController {
     @ResponseBody
     public Map richTextUpload(HttpSession session, MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        Map fileMap = new HashMap(16);
+        Map<String, Object>  fileMap= new HashMap<>(16);
         if (user == null) {
             fileMap.put("success", false);
             fileMap.put("msg", "用户未登录，请先登录");
