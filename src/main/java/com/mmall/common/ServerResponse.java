@@ -71,7 +71,10 @@ public class ServerResponse<T> implements Serializable{
         return new ServerResponse<T>(ResponseCode.ERROR.getCode(),ResponseCode.ERROR.getDesc());
     }
 
-    //需要提示的错误（比如用户已存在）
+    /**
+     * 需要提示的错误（比如用户已存在）
+     *
+     */
     public static <T> ServerResponse<T> createByErrorMessage(String errorMessage){
         return new ServerResponse<T>(ResponseCode.ERROR.getCode(),errorMessage);
     }

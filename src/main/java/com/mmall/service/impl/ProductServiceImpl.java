@@ -19,6 +19,7 @@ import com.mmall.vo.ProductListVo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.joda.time.DateTimeUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -147,13 +148,14 @@ public class ProductServiceImpl implements IProductService {
 
     public  ProductListVo assembleProductListVo(Product product){
         ProductListVo productListVo = new ProductListVo();
-        productListVo.setId(product.getId());
-        productListVo.setCategoryId(product.getCategoryId());
-        productListVo.setName(product.getName());
-        productListVo.setMainImage(product.getMainImage());
+//        productListVo.setId(product.getId());
+//        productListVo.setCategoryId(product.getCategoryId());
+//        productListVo.setName(product.getName());
+//        productListVo.setMainImage(product.getMainImage());
+//        productListVo.setPrice(product.getPrice());
+//        productListVo.setStatus(product.getStatus());
+        BeanUtils.copyProperties(product, productListVo);
         productListVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix","http://img.happymmall.com/"));
-        productListVo.setPrice(product.getPrice());
-        productListVo.setStatus(product.getStatus());
 
         return productListVo;
     }
@@ -196,5 +198,13 @@ public class ProductServiceImpl implements IProductService {
             return ServerResponse.createByErrorMessage("商品已售完");
         }
 
+    }
+
+    @Override
+    public ServerResponse<PageInfo> listProduct(String keyword, Integer categoryID, int pageNum, int pageSize) {
+        if (StringUtils.isBlank(keyword) && categoryID == null) {
+            return ServerResponse.createByErrorMessage(ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+        return null;
     }
 }

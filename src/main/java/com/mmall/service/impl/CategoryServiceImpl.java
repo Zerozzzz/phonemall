@@ -74,7 +74,7 @@ public class CategoryServiceImpl implements ICategoryService{
     public ServerResponse selectCategoryAndChildrenById(Integer categoryId){
         Set<Category> categorySet = new HashSet<>();
         //调用递归，此时返回的Set就包含了所有子节点及孙子节点
-        getDeepChildCategory(categorySet,categoryId);
+        categorySet = getDeepChildCategory(categorySet,categoryId);
 
         List<Integer> categoryIdList = Lists.newArrayList();
         if (categoryId != null) {
@@ -96,6 +96,7 @@ public class CategoryServiceImpl implements ICategoryService{
             categorySet.add(category);
         }
         //递归查找子节点，当查不到子分类时，递归结束
+
         //当查寻集合时，Mybatis不会返回"null",不用进行非空判断，不会出现空指针异常
         List<Category> categoryList = categoryMapper.selectCategoryChildrenByParentId(categoryId);
         for (Category categoryItem : categoryList) {
