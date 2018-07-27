@@ -11,18 +11,16 @@ import com.mmall.dao.CategoryMapper;
 import com.mmall.dao.ProductMapper;
 import com.mmall.pojo.Category;
 import com.mmall.pojo.Product;
+import com.mmall.service.ICategoryService;
 import com.mmall.service.IProductService;
 import com.mmall.util.DateTimeUtil;
 import com.mmall.util.PropertiesUtil;
 import com.mmall.vo.ProductDetailVo;
 import com.mmall.vo.ProductListVo;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
-import org.joda.time.DateTimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -38,6 +36,9 @@ public class ProductServiceImpl implements IProductService {
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Autowired
+    private ICategoryService iCategoryService;
 
     @Override
     public ServerResponse saveOrUpdateProduct(Product product){
@@ -141,19 +142,13 @@ public class ProductServiceImpl implements IProductService {
             productListVoList.add(productListVo);
         }
 
-        PageInfo pageResult = new PageInfo(productList);
+        PageInfo pageResult = new PageInfo<>(productList);
         pageResult.setList(productListVoList);
         return ServerResponse.createBySuccess(pageResult);
     }
 
     public  ProductListVo assembleProductListVo(Product product){
         ProductListVo productListVo = new ProductListVo();
-//        productListVo.setId(product.getId());
-//        productListVo.setCategoryId(product.getCategoryId());
-//        productListVo.setName(product.getName());
-//        productListVo.setMainImage(product.getMainImage());
-//        productListVo.setPrice(product.getPrice());
-//        productListVo.setStatus(product.getStatus());
         BeanUtils.copyProperties(product, productListVo);
         productListVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix","http://img.happymmall.com/"));
 
@@ -175,7 +170,7 @@ public class ProductServiceImpl implements IProductService {
             productListVoList.add(productListVo);
         }
 
-        PageInfo pageResult = new PageInfo(productList);
+        PageInfo pageResult = new PageInfo<>(productList);
         pageResult.setList(productListVoList);
 
         return ServerResponse.createBySuccess(pageResult);
@@ -204,6 +199,19 @@ public class ProductServiceImpl implements IProductService {
     public ServerResponse<PageInfo> listProduct(String keyword, Integer categoryID, int pageNum, int pageSize) {
         if (StringUtils.isBlank(keyword) && categoryID == null) {
             return ServerResponse.createByErrorMessage(ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+        List<Integer> categoryIdList = Lists.newArrayList();
+
+        if (categoryID != null) {
+            Category category = categoryMapper.selectByPrimaryKey(categoryID);
+            if (category == null && StringUtils.isBlank(keyword)) {
+                //没有该分类并且关键字为空，返回一个空的结果集，但是不能报错
+                PageHelper.startPage(pageNum, pageSize);
+                List<ProductDetailVo> productDetailVoList = Lists.newArrayList();
+                PageInfo<ProductDetailVo> pageInfo = new PageInfo<>(productDetailVoList);
+                return ServerResponse.createBySuccess(pageInfo);
+            }
+            categoryIdList = iCategoryService.selectCategoryAndChildrenById(category.getId()).getData();
         }
         return null;
     }

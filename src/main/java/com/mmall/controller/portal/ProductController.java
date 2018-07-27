@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
  */
 @RequestMapping("/product/")
 @Controller
-public class ProductManageController {
+public class ProductController {
 
     @Autowired
     IProductService iProductService;

@@ -71,7 +71,7 @@ public class CategoryServiceImpl implements ICategoryService{
     }
 
     @Override
-    public ServerResponse selectCategoryAndChildrenById(Integer categoryId){
+    public ServerResponse<List<Integer>> selectCategoryAndChildrenById(Integer categoryId){
         Set<Category> categorySet = new HashSet<>();
         //调用递归，此时返回的Set就包含了所有子节点及孙子节点
         categorySet = getDeepChildCategory(categorySet,categoryId);

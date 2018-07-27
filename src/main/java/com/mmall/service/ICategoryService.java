@@ -3,6 +3,7 @@ package com.mmall.service;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.Category;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +17,6 @@ public interface ICategoryService {
 
     ServerResponse<List<Category>> getChildrenParallelCategory(Integer categoryId);
 
-    ServerResponse selectCategoryAndChildrenById(Integer categoryId);
+    ServerResponse<List<Integer>> selectCategoryAndChildrenById(Integer categoryId);
 
 }
