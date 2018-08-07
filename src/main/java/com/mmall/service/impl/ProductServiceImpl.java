@@ -1,5 +1,6 @@
 package com.mmall.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Preconditions;
@@ -196,23 +197,37 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ServerResponse<PageInfo> listProduct(String keyword, Integer categoryID, int pageNum, int pageSize) {
+    public ServerResponse<PageInfo> listProduct(String keyword, Integer categoryID, int pageNum, int pageSize,
+                                                String orderBy) {
         if (StringUtils.isBlank(keyword) && categoryID == null) {
             return ServerResponse.createByErrorMessage(ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
+        PageHelper.startPage(pageNum, pageSize);
         List<Integer> categoryIdList = Lists.newArrayList();
 
         if (categoryID != null) {
             Category category = categoryMapper.selectByPrimaryKey(categoryID);
             if (category == null && StringUtils.isBlank(keyword)) {
                 //没有该分类并且关键字为空，返回一个空的结果集，但是不能报错
-                PageHelper.startPage(pageNum, pageSize);
                 List<ProductDetailVo> productDetailVoList = Lists.newArrayList();
                 PageInfo<ProductDetailVo> pageInfo = new PageInfo<>(productDetailVoList);
                 return ServerResponse.createBySuccess(pageInfo);
             }
             categoryIdList = iCategoryService.selectCategoryAndChildrenById(category.getId()).getData();
+
         }
+
+        if (StringUtils.isNotBlank(orderBy)) {
+            if (Const.ProductOrderByPrice.PRICE_ASC_DESC.contains(orderBy)) {
+                String[] orderByPrice = orderBy.split("_");
+                PageHelper.orderBy(orderByPrice[0]+ " " + orderByPrice[1]);
+            }
+        }
+
+        if (StringUtils.isNotBlank(keyword)) {
+            keyword = new StringBuilder("%").append(keyword).append("%").toString();
+        }
+
         return null;
     }
 }

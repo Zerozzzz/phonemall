@@ -22,5 +22,5 @@ public interface IProductService {
 
     ServerResponse<ProductDetailVo> getProductDetail(Integer productID);
 
-    ServerResponse<PageInfo> listProduct(String keyword, Integer categoryID, int pageNum, int pageSize);
+    ServerResponse<PageInfo> listProduct(String keyword, Integer categoryID, int pageNum, int pageSize, String orderBy);
 }

@@ -185,7 +185,7 @@
   </select>
 
   <select id="selectProductListByIdAndName" resultMap="BaseResultMap" parameterType="map">
-    <include refid="Base_Column_List"/>
+    SELECT <include refid="Base_Column_List"/>
     FROM mmall_product
     <where>
       <if test="id != null">

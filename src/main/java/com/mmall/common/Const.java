@@ -1,5 +1,9 @@
 package com.mmall.common;
 
+import com.google.common.collect.Sets;
+
+import java.util.Set;
+
 /**
  * Created by Administrator on 2017/12/11.
  */
@@ -9,6 +13,10 @@ public class Const {
     public static final String USERNAME = "username";
 
     public static final String EMAIL = "email";
+
+    public interface ProductOrderByPrice{
+        Set<String> PRICE_ASC_DESC = Sets.newHashSet("price_asc", "price_desc");
+    }
 
     public interface Role{
 

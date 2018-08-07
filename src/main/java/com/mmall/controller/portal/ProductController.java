@@ -32,8 +32,9 @@ public class ProductController {
     public ServerResponse<PageInfo> productList(@RequestParam(value = "keyword", required = false) String keyword,
                                                 @RequestParam(value = "categoryID", required = false)Integer categoryID,
                                                 @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                                @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+                                                @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                                @RequestParam(value = "orderBy", defaultValue = "") String orderBy) {
 
-        return iProductService.listProduct(keyword, categoryID, pageNum, pageSize);
+        return iProductService.listProduct(keyword, categoryID, pageNum, pageSize, orderBy);
     }
 }
