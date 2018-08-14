@@ -163,8 +163,7 @@ public class ProductServiceImpl implements IProductService {
             productName = new StringBuffer().append("%").append(productName).append("%").toString();
         }
 
-        List<Product> productList = productMapper.selectProductListByIdAndName(productId,
-                productName, pageNum, pageSize);
+        List<Product> productList = productMapper.selectProductListByIdAndName(productId, productName);
         List<ProductListVo> productListVoList = new LinkedList<>();
         for (Product productItem: productList) {
             ProductListVo productListVo = assembleProductListVo(productItem);
@@ -227,7 +226,15 @@ public class ProductServiceImpl implements IProductService {
         if (StringUtils.isNotBlank(keyword)) {
             keyword = new StringBuilder("%").append(keyword).append("%").toString();
         }
-
-        return null;
+        List<Product> productList = productMapper.selectProductListByCategoryIdOrKeyword(StringUtils.isBlank(keyword)?
+                null : keyword,categoryIdList.size()==0? null : categoryIdList);
+        List<ProductListVo> productListVoList = Lists.newArrayList();
+        for (Product product : productList) {
+            ProductListVo productListVo = assembleProductListVo(product);
+            productListVoList.add(productListVo);
+        }
+        PageInfo pageInfo = new PageInfo(productList);
+        pageInfo.setList(productListVoList);
+        return ServerResponse.createBySuccess(pageInfo);
     }
 }

@@ -1,6 +1,7 @@
 package com.mmall.dao;
 
 import com.mmall.pojo.Product;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,5 +20,9 @@ public interface ProductMapper {
 
     List<Product> selectProductList();
 
-    List<Product> selectProductListByIdAndName(Integer productId, String productName, int pageNum, int pageSize);
+    List<Product> selectProductListByIdAndName(@Param("productId") Integer productId,
+                                               @Param("productName") String productName);
+
+    List<Product> selectProductListByCategoryIdOrKeyword(@Param("keyword") String keyword,
+                                                         @Param("categoryIdList") List<Integer> categoryIdList);
 }

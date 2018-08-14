@@ -198,4 +198,19 @@
     ORDER BY id DESC
   </select>
 
+  <select id="selectProductListByCategoryIdOrKeyword" parameterType="map" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/>
+    FROM mmall_product
+    WHERE status=1
+    <if test="keyword != null">
+      AND name LIKE #{keyword}
+    </if>
+    <if test="categoryIdList != null">
+      AND category_id IN
+      <foreach item="item" index="index" open="(" separator="," close=")" collection="categoryIdList">
+        #{item}
+      </foreach>
+    </if>
+  </select>
+
 </mapper>
