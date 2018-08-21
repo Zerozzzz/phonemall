@@ -30,6 +30,18 @@ public class Const {
         int ROLE_ADMIN = 1;
     }
 
+    public interface Cart{
+        /**
+         * 选中状态
+         */
+        int CHECK = 1;
+
+        /**
+         * 为选中状态
+         */
+        int UN_CHECK = 0;
+    }
+
     public enum SaleStateEnum{
         ON_SALE(1,"在售");
         private int code;

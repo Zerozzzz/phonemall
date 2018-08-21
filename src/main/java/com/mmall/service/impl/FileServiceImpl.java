@@ -16,11 +16,11 @@ import java.util.UUID;
  * Created by Administrator on 2018/4/24.
  */
 @Service("iFileService")
-public class FileServiceImplements implements IFileService {
+public class FileServiceImpl implements IFileService {
 
     @Override
     public String upload(MultipartFile file, String path) {
-        Logger logger = LoggerFactory.getLogger(FileServiceImplements.class);
+        Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
         String originFileName = file.getOriginalFilename();
         //扩展名
         String fileExtensionName = originFileName.substring(originFileName.lastIndexOf(".")+1);
