@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpSession;
 
 /**
  * @author Zero
@@ -29,6 +28,8 @@ public class ProductController {
         return iProductService.getProductDetail(productID);
     }
 
+    @RequestMapping("listProduct.do")
+    @ResponseBody
     public ServerResponse<PageInfo> productList(@RequestParam(value = "keyword", required = false) String keyword,
                                                 @RequestParam(value = "categoryID", required = false)Integer categoryID,
                                                 @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,

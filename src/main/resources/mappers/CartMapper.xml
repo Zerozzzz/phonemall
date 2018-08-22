@@ -133,4 +133,18 @@
 
   </select>
 
+  <select id="selectCartProductVoByUserId" resultType="com.mmall.vo.CartProductVo" parameterType="integer">
+    SELECT
+    a.id AS cartId, a.user_id, a.quantity, a.checked AS productCheck, b.id AS productId, b.name AS productName,
+    b.subtitle, b.main_image AS productMainImage, b.stock AS productStock, b.status AS productStatus,
+    b.price AS productPrice
+    FROM mmall_cart a LEFT JOIN mmall_product b ON a.product_id = b.id
+    WHERE a.user_id = #{userId}
+
+  </select>
+
+  <select id="selectCheckCount" resultType="int" parameterType="integer" >
+    SELECT COUNT(1) FROM mmall_cart WHERE checked = 0 AND user_id = #{userId}
+  </select>
+
 </mapper>

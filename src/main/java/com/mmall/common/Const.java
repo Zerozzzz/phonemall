@@ -40,6 +40,9 @@ public class Const {
          * 为选中状态
          */
         int UN_CHECK = 0;
+
+        String STOCK_NUM_SUFFICIENT = "STOCK_NUM_SUFFICIENT";
+        String STOCK_NUM_INSUFFICIENT = "STOCK_NUM_INSUFFICIENT";
     }
 
     public enum SaleStateEnum{
