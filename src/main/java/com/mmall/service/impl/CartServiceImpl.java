@@ -1,5 +1,6 @@
 package com.mmall.service.impl;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.mmall.common.Const;
 import com.mmall.common.ResponseCode;
@@ -11,6 +12,7 @@ import com.mmall.util.BigDecimalUtil;
 import com.mmall.util.PropertiesUtil;
 import com.mmall.vo.CartProductVo;
 import com.mmall.vo.CartVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -28,6 +30,13 @@ public class CartServiceImpl implements ICartService {
 
     @Autowired
     private CartMapper cartMapper;
+
+
+    @Override
+    public ServerResponse<CartVo> list(Integer userId) {
+        CartVo cartVo = this.getCartProductLimit(userId);
+        return ServerResponse.createBySuccess(cartVo);
+    }
 
     @Override
     public ServerResponse<CartVo> add(Integer userId, Integer count, Integer productId) {
@@ -47,11 +56,47 @@ public class CartServiceImpl implements ICartService {
             cart.setQuantity(count);
             cartMapper.updateByPrimaryKey(cart);
         }
-        CartVo cartVo = this.getCartProductLimit(userId);
-        if (cartVo == null) {
-            return ServerResponse.createByErrorMessage("添加商品出错");
+        return this.list(userId);
+    }
+
+    @Override
+    public ServerResponse<CartVo> update(Integer userId, Integer count, Integer productId) {
+        if (count == null || productId == null) {
+            return ServerResponse.createByErrorCode(ResponseCode.ILLEGAL_ARGUMENT.getCode(),
+                    ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
-        return ServerResponse.createBySuccess("添加购物车成功", cartVo);
+
+        Cart cart = cartMapper.selectCartByUserIdProductId(userId, productId);
+        if (cart != null) {
+            cart.setQuantity(count);
+            cartMapper.updateByPrimaryKeySelective(cart);
+        }
+        return this.list(userId);
+    }
+
+    @Override
+    public ServerResponse<CartVo> delete(Integer userId, String productIds) {
+        List<String> productIdList = Splitter.on(",").splitToList(productIds);
+        if (CollectionUtils.isEmpty(productIdList)) {
+            return ServerResponse.createByErrorCode(ResponseCode.ILLEGAL_ARGUMENT.getCode(),
+                    ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+        cartMapper.deleteByUserIdProductIds(userId,productIdList);
+        return this.list(userId);
+    }
+
+    @Override
+    public ServerResponse<CartVo> selectOrNot(Integer userId,Integer productId, Integer checked) {
+        cartMapper.selectOrNot(userId, productId, checked);
+        return this.list(userId);
+    }
+
+    @Override
+    public ServerResponse<Integer> countProductNum(Integer userId) {
+        if (userId == null) {
+            return ServerResponse.createBySuccess(0);
+        }
+        return ServerResponse.createBySuccess(cartMapper.countProductNum(userId));
     }
 
     private CartVo getCartProductLimit(Integer userId) {
