@@ -1,1 +1,1 @@
-phone mall
+为独立运用SSM框架和其他的技术（如Lombok），模仿淘宝商城
