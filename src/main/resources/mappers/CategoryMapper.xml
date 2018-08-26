@@ -112,7 +112,7 @@
       name = #{name,jdbcType=VARCHAR},
       status = #{status,jdbcType=BIT},
       sort_order = #{sortOrder,jdbcType=INTEGER},
-      creat_time = #{creatTime,jdbcType=TIMESTAMP},
+      create_time = #{creatTime,jdbcType=TIMESTAMP},
       update_time =now()
     where id = #{id,jdbcType=INTEGER}
   </update>

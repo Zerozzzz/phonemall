@@ -27,7 +27,7 @@ import java.util.Map;
  * @date 2017/12/10
  */
 @Controller
-@RequestMapping("/manage/product")
+@RequestMapping("/manage/product/")
 public class ProductManageController {
 
     @Autowired
@@ -53,7 +53,7 @@ public class ProductManageController {
         }
     }
 
-    @RequestMapping(value = "set_sale_status.do")
+    @RequestMapping(value = "set_sale_status.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse setSaleStatus(HttpSession session,Integer productId,Integer productStatus){
         User user = (User) session.getAttribute(Const.CURRENT_USER);

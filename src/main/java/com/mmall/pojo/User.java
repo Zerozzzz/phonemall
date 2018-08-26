@@ -1,6 +1,6 @@
 package com.mmall.pojo;
 
-import com.sun.istack.internal.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -12,7 +12,7 @@ import java.util.Date;
 @Getter
 public class User {
     private Integer id;
-    @NotNull
+
     private String username;
 
     private String password;
