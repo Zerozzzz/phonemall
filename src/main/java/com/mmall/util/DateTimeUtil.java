@@ -17,7 +17,7 @@ public class DateTimeUtil {
 
     //Date - Str
     //Str - Date
-    public static final String STANDARD_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private static final String STANDARD_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     public static String DateToStr(Date date, String formatStr) {
         if (date == null) {

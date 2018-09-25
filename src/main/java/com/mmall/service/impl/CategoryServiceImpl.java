@@ -21,7 +21,7 @@ import java.util.Set;
  * Created by Administrator on 2017/12/10.
  */
 @Service("iCategoryService")
-public class CategoryServiceImpl implements ICategoryService{
+public class CategoryServiceImpl implements ICategoryService {
 
     private Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
 
@@ -29,7 +29,7 @@ public class CategoryServiceImpl implements ICategoryService{
     private CategoryMapper categoryMapper;
 
     @Override
-    public ServerResponse addCategory(String categoryName,Integer parentId){
+    public ServerResponse addCategory(String categoryName, Integer parentId) {
         if (StringUtils.isBlank(categoryName) || parentId == null) {
             return ServerResponse.createByErrorMessage("商品管理参数未添加");
         }
@@ -45,7 +45,7 @@ public class CategoryServiceImpl implements ICategoryService{
     }
 
     @Override
-    public ServerResponse updateCategoryName(Integer categoryId,String categoryName){
+    public ServerResponse updateCategoryName(Integer categoryId, String categoryName) {
         if (categoryId == null || StringUtils.isBlank(categoryName)) {
             return ServerResponse.createByErrorMessage("参数不能为空");
         }
@@ -62,7 +62,7 @@ public class CategoryServiceImpl implements ICategoryService{
     }
 
     @Override
-    public ServerResponse<List<Category>> getChildrenParallelCategory(Integer categoryId){
+    public ServerResponse<List<Category>> getChildrenParallelCategory(Integer categoryId) {
         List<Category> categoryList = categoryMapper.selectCategoryChildrenByParentId(categoryId);
         if (CollectionUtils.isEmpty(categoryList)) {
             logger.info("该分类没有子分类");
@@ -71,10 +71,10 @@ public class CategoryServiceImpl implements ICategoryService{
     }
 
     @Override
-    public ServerResponse<List<Integer>> selectCategoryAndChildrenById(Integer categoryId){
+    public ServerResponse<List<Integer>> selectCategoryAndChildrenById(Integer categoryId) {
         Set<Category> categorySet = new HashSet<>();
         //调用递归，此时返回的Set就包含了所有子节点及孙子节点
-        categorySet = getDeepChildCategory(categorySet,categoryId);
+        categorySet = getDeepChildCategory(categorySet, categoryId);
 
         List<Integer> categoryIdList = Lists.newArrayList();
         if (categoryId != null) {
@@ -86,10 +86,11 @@ public class CategoryServiceImpl implements ICategoryService{
         return ServerResponse.createBySuccess(categoryIdList);
 
     }
+
     /**
      * 递归查询子分类，将所有的子分类装入Set中返回
      */
-    private Set<Category> getDeepChildCategory(Set<Category> categorySet,Integer categoryId){
+    private Set<Category> getDeepChildCategory(Set<Category> categorySet, Integer categoryId) {
         Category category = categoryMapper.selectByPrimaryKey(categoryId);
         //将category和所有的子节点添加进Set中，返还Set（Set自动去除重复）
         if (category != null) {
@@ -100,7 +101,7 @@ public class CategoryServiceImpl implements ICategoryService{
         //当查寻集合时，Mybatis不会返回"null",不用进行非空判断，不会出现空指针异常
         List<Category> categoryList = categoryMapper.selectCategoryChildrenByParentId(categoryId);
         for (Category categoryItem : categoryList) {
-            getDeepChildCategory(categorySet,categoryItem.getId());
+            getDeepChildCategory(categorySet, categoryItem.getId());
         }
         return categorySet;
     }
