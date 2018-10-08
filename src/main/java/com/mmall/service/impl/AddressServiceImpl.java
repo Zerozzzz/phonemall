@@ -24,4 +24,26 @@ public class AddressServiceImpl implements AddressService {
         return ServerResponse.createBySuccess("success", shipId);
 
     }
+
+    @Override
+    public ServerResponse delete(Integer shippingId) {
+        int result = shippingMapper.deleteByPrimaryKey(shippingId);
+        if (result > 0) {
+            return ServerResponse.createBySuccess("delete shipping success", ResponseCode.SUCCESS.getCode());
+        } else {
+            return ServerResponse.createByErrorCode(ResponseCode.ERROR.getCode(), ResponseCode.ERROR.getDesc());
+        }
+    }
+
+    @Override
+    public ServerResponse update(Shipping shipping) {
+        int result = shippingMapper.updateByPrimaryKey(shipping);
+        if (result > 0) {
+            return ServerResponse.createBySuccess("delete shipping success", ResponseCode.SUCCESS.getCode());
+        } else {
+            return ServerResponse.createByErrorCode(ResponseCode.ERROR.getCode(), ResponseCode.ERROR.getDesc());
+        }
+    }
+
+
 }

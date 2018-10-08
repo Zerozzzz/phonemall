@@ -30,4 +30,25 @@ public class AddressController {
         }
         return addressService.add(shipping);
     }
+
+    @ResponseBody
+    @RequestMapping("deleteAddress.do")
+    public ServerResponse deleteAddress(HttpSession session, Integer shippingId) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCode(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return addressService.delete(shippingId);
+    }
+
+    @ResponseBody
+    @RequestMapping("deleteAddress.do")
+    public ServerResponse updateAddress(HttpSession session, Shipping shipping) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCode(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return addressService.update(shipping);
+    }
 }
+
