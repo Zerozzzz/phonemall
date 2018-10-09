@@ -42,13 +42,23 @@ public class AddressController {
     }
 
     @ResponseBody
-    @RequestMapping("deleteAddress.do")
+    @RequestMapping("updateAddress.do")
     public ServerResponse updateAddress(HttpSession session, Shipping shipping) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByErrorCode(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
         return addressService.update(shipping);
+    }
+
+    @RequestMapping("select.do")
+    @ResponseBody
+    public ServerResponse select(HttpSession session, Integer shippingId) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCode(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return addressService.select(shippingId);
     }
 }
 

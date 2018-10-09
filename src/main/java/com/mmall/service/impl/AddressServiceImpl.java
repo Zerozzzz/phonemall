@@ -45,5 +45,10 @@ public class AddressServiceImpl implements AddressService {
         }
     }
 
+    @Override
+    public ServerResponse select(Integer shippingId) {
+        return null;
+    }
+
 
 }

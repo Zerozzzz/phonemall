@@ -10,4 +10,6 @@ public interface AddressService {
     ServerResponse delete(Integer shippingId);
 
     ServerResponse update(Shipping shipping);
+
+    ServerResponse select(Integer shippingId);
 }
